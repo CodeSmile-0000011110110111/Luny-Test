@@ -38,7 +38,7 @@ namespace Luny.Test
 				config.UpdateRate = 60;
 			});
 
-			var observer = LunyEngine.Instance.GetObserver<LunyEngineMockObserver>();
+			var observer = LunyEngineInternal.Instance.GetObserver<LunyEngineMockObserver>();
 			adapter.Run();
 
 			// Filter out OnSceneLoaded/Unloaded if they were called (not expected here but good to be specific)
@@ -64,7 +64,7 @@ namespace Luny.Test
 				config.UpdateRate = 60;
 			});
 
-			var observer = LunyEngine.Instance.GetObserver<LunyEngineMockObserver>();
+			var observer = LunyEngineInternal.Instance.GetObserver<LunyEngineMockObserver>();
 			adapter.Run();
 
 			// Verify count

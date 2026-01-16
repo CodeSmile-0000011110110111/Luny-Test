@@ -1,5 +1,6 @@
 using Luny.Engine;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable NotNullOrRequiredMemberIsNotInitialized
 
@@ -35,7 +36,7 @@ namespace Luny.Test
 		public const Int32 DefaultFixedStepRate = 25;
 
 		private static ILunyEngineNativeAdapter s_Instance;
-		private ILunyEngineAdapter _lunyEngine;
+		private ILunyEngineLifecycle _lunyEngine;
 
 		public Int32 Iterations { get; set; } = DefaultIterations;
 		public Int32 UpdateRate { get; set; } = DefaultUpdateRate;
@@ -58,9 +59,8 @@ namespace Luny.Test
 		private void Initialize()
 		{
 			LunyTraceLogger.LogInfoInitializing(this);
-			s_Instance = ILunyEngineNativeAdapter.ValidateAdapterSingletonInstance(s_Instance, this);
-			_lunyEngine = LunyEngine.CreateInstance(s_Instance);
-			LunyTraceLogger.LogInfoInitialized(s_Instance);
+			_lunyEngine = ILunyEngineNativeAdapter.CreateEngine(ref s_Instance, this);
+			LunyTraceLogger.LogInfoInitialized(this);
 		}
 
 		public void Run()
@@ -100,17 +100,18 @@ namespace Luny.Test
 		{
 			ILunyEngineNativeAdapter.ThrowIfAdapterNull(s_Instance);
 			ILunyEngineNativeAdapter.ThrowIfLunyEngineNull(_lunyEngine);
-			_lunyEngine.OnEngineStartup(this);
+			ILunyEngineNativeAdapter.Startup(s_Instance, _lunyEngine);
 		}
 
-		private void FixedStep(Double delta) => _lunyEngine.OnEngineFixedStep(delta, this);
+		private void FixedStep(Double delta) => ILunyEngineNativeAdapter.FixedStep(delta, s_Instance, _lunyEngine);
 
 		private void Update(Double delta)
 		{
-			_lunyEngine.OnEngineUpdate(delta, this);
-			_lunyEngine.OnEngineLateUpdate(delta, this);
+			ILunyEngineNativeAdapter.Update(delta, s_Instance, _lunyEngine);
+			ILunyEngineNativeAdapter.LateUpdate(delta, s_Instance, _lunyEngine);
 		}
 
+		[SuppressMessage("ReSharper", "HeuristicUnreachableCode")]
 		private void Shutdown()
 		{
 			if (s_Instance == null)
@@ -127,7 +128,7 @@ namespace Luny.Test
 			finally
 			{
 				ILunyEngineNativeAdapter.ShutdownComplete(s_Instance);
-				LunyEngine.ForceReset_UnityEditorAndUnitTestsOnly();
+				LunyEngineInternal.ForceReset_UnityEditorAndUnitTestsOnly();
 				_lunyEngine = null;
 				s_Instance = null;
 			}
