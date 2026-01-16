@@ -128,7 +128,7 @@ namespace Luny.Test
 			finally
 			{
 				ILunyEngineNativeAdapter.ShutdownComplete(s_Instance);
-				LunyEngineInternal.ForceReset_UnityEditorAndUnitTestsOnly();
+				LunyEngine.ForceReset_UnityEditorAndUnitTestsOnly();
 				_lunyEngine = null;
 				s_Instance = null;
 			}

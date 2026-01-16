@@ -11,9 +11,9 @@ namespace Luny.Test
 		[TearDown]
 		public void TearDown()
 		{
-			if (LunyEngineInternal.Instance != null)
+			if (LunyEngine.Instance != null)
 			{
-				LunyLogger.LogWarning($"Forcing {nameof(LunyEngineInternal)} shutdown! Common cause: Test or Mock adapter threw an exception.");
+				LunyLogger.LogWarning($"Forcing {nameof(LunyEngine)} shutdown! Common cause: Test or Mock adapter threw an exception.");
 				LunyEngineMockAdapter.Teardown();
 			}
 		}
