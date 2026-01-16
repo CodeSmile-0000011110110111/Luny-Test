@@ -59,8 +59,8 @@ namespace Luny.Test
 		{
 			LunyTraceLogger.LogInfoInitializing(this);
 			s_Instance = ILunyEngineNativeAdapter.ValidateAdapterSingletonInstance(s_Instance, this);
-			_lunyEngine = LunyEngine.CreateInstance(this);
-			LunyTraceLogger.LogInfoInitialized(this);
+			_lunyEngine = LunyEngine.CreateInstance(s_Instance);
+			LunyTraceLogger.LogInfoInitialized(s_Instance);
 		}
 
 		public void Run()
@@ -100,15 +100,15 @@ namespace Luny.Test
 		{
 			ILunyEngineNativeAdapter.ThrowIfAdapterNull(s_Instance);
 			ILunyEngineNativeAdapter.ThrowIfLunyEngineNull(_lunyEngine);
-			_lunyEngine.OnEngineStartup();
+			_lunyEngine.OnEngineStartup(this);
 		}
 
-		private void FixedStep(Double delta) => _lunyEngine.OnEngineFixedStep(delta);
+		private void FixedStep(Double delta) => _lunyEngine.OnEngineFixedStep(delta, this);
 
 		private void Update(Double delta)
 		{
-			_lunyEngine.OnEngineUpdate(delta);
-			_lunyEngine.OnEngineLateUpdate(delta);
+			_lunyEngine.OnEngineUpdate(delta, this);
+			_lunyEngine.OnEngineLateUpdate(delta, this);
 		}
 
 		private void Shutdown()
@@ -127,7 +127,7 @@ namespace Luny.Test
 			finally
 			{
 				ILunyEngineNativeAdapter.ShutdownComplete(s_Instance);
-				LunyEngine.ResetDisposedFlag_UnityEditorAndUnitTestsOnly();
+				LunyEngine.ForceReset_UnityEditorAndUnitTestsOnly();
 				_lunyEngine = null;
 				s_Instance = null;
 			}
