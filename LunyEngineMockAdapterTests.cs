@@ -8,7 +8,12 @@ namespace Luny.Test
 	{
 		[Test] public void Mock_MinimumParameters_UpdateAndFixedStepRunOnce()
 		{
-			var adapter = new LunyEngineMockAdapter { Iterations = 1, FixedStepRate = 1, UpdateRate = 1 };
+			var adapter = CreateEngineMockAdapter(config =>
+			{
+				config.Iterations = 1;
+				config.FixedStepRate = 1;
+				config.UpdateRate = 1;
+			});
 
 			Assert.DoesNotThrow(() => adapter.Run());
 			Assert.That(adapter.FixedStepCallCount, Is.EqualTo(1));
@@ -17,19 +22,19 @@ namespace Luny.Test
 
 		[Test] public void Mock_InvalidIterations_Throws()
 		{
-			var adapter = new LunyEngineMockAdapter { Iterations = 0 };
+			var adapter = CreateEngineMockAdapter(config => config.Iterations = 0);
 			Assert.Throws<ArgumentOutOfRangeException>(() => adapter.Run());
 		}
 
 		[Test] public void Mock_InvalidFixedStepRate_Throws()
 		{
-			var adapter = new LunyEngineMockAdapter { FixedStepRate = 0 };
+			var adapter = CreateEngineMockAdapter(config => { config.FixedStepRate = 0; });
 			Assert.Throws<ArgumentOutOfRangeException>(() => adapter.Run());
 		}
 
 		[Test] public void Mock_InvalidUpdateRate_Throws()
 		{
-			var adapter = new LunyEngineMockAdapter { UpdateRate = 0 };
+			var adapter = CreateEngineMockAdapter(config => { config.UpdateRate = 0; });
 			Assert.Throws<ArgumentOutOfRangeException>(() => adapter.Run());
 		}
 
@@ -61,9 +66,13 @@ namespace Luny.Test
 		[TestCase(10, 7, 2)]
 		[TestCase(10, 6, 1)]
 		[TestCase(10, 1, 1)]
-		public void Mock_FixedStepRate_ExpectedCallCount(Int32 iterations, Int32 fixedStepRate, Int32 expectedStepCount)
+		public void Mock_FixedStepRate_ExpectedCallCount(Int32 iterations, Int32 stepRate, Int32 expectedStepCount)
 		{
-			var adapter = new LunyEngineMockAdapter { Iterations = iterations, FixedStepRate = fixedStepRate };
+			var adapter = CreateEngineMockAdapter(config =>
+			{
+				config.Iterations = iterations;
+				config.FixedStepRate = stepRate;
+			});
 
 			var iteration = 0;
 			adapter.OnEndOfFrame += frameCount =>

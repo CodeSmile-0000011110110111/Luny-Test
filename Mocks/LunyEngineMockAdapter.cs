@@ -5,13 +5,28 @@ using System;
 
 namespace Luny.Test
 {
+	internal interface ILunyEngineMockAdapter
+	{
+		event Action<Int32> OnEndOfFrame;
+
+		Int32 Iterations { get; set; }
+		Int32 UpdateRate { get; set; }
+		Int32 FixedStepRate { get; set; }
+
+		Int32 UpdateCallCount { get; }
+		Int32 FixedStepCallCount { get; }
+
+		void Run();
+		void Quit();
+	}
+
 	/// <summary>
 	/// Mock engine adapter for unit testing LunyEngine lifecycle.
 	/// </summary>
 	/// <remarks>
 	///	The assumption is that FixedStep always runs in the first frame.
 	/// </remarks>
-	internal sealed class LunyEngineMockAdapter : ILunyEngineNativeAdapter
+	internal sealed class LunyEngineMockAdapter : ILunyEngineNativeAdapter, ILunyEngineMockAdapter
 	{
 		public event Action<Int32> OnEndOfFrame;
 
@@ -29,7 +44,14 @@ namespace Luny.Test
 		public Int32 UpdateCallCount { get; private set; }
 		public Int32 FixedStepCallCount { get; private set; }
 
-		internal static void ForceShutdown() => ((LunyEngineMockAdapter)s_Instance)?.Shutdown();
+		public static ILunyEngineMockAdapter Create(Action<ILunyEngineMockAdapter> configure = null)
+		{
+			var adapter = new LunyEngineMockAdapter();
+			configure?.Invoke(adapter);
+			return adapter;
+		}
+
+		internal static void Teardown() => ((LunyEngineMockAdapter)s_Instance)?.Quit();
 
 		public LunyEngineMockAdapter() => Initialize();
 
@@ -72,6 +94,8 @@ namespace Luny.Test
 			Shutdown();
 		}
 
+		public void Quit() => Shutdown();
+
 		private void Startup()
 		{
 			ILunyEngineNativeAdapter.ThrowIfAdapterNull(s_Instance);
@@ -87,7 +111,7 @@ namespace Luny.Test
 			_lunyEngine.OnEngineLateUpdate(delta);
 		}
 
-		internal void Shutdown()
+		private void Shutdown()
 		{
 			if (s_Instance == null)
 				return;
