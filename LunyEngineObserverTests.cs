@@ -6,7 +6,7 @@ using System.Linq;
 namespace Luny.Test
 {
 	[TestFixture]
-	public sealed class LunyEngineObserverTests : LunyEngineTestBase
+	public sealed class LunyEngineObserverTests : LunyTestBase
 	{
 		private readonly String[] _expectedMethodCallOrder =
 		{
@@ -76,8 +76,22 @@ namespace Luny.Test
 
 			// Filter out OnSceneLoaded/Unloaded if they were called (not expected here but good to be specific)
 			var actual = observer.CallOrder.Where(name => _repeatingMethods.Contains(name)).ToArray();
-			string[] expected = Enumerable.Repeat(_repeatingMethods, updateCount).SelectMany(x => x).ToArray();
+			var expected = Enumerable.Repeat(_repeatingMethods, updateCount).SelectMany(x => x).ToArray();
 			Assert.That(actual, Is.EqualTo(expected));
+		}
+
+		[Test] public void ObserverCallbacks_FrameCountInFirstFrame_IsOne()
+		{
+			var adapter = CreateEngineMockAdapter(config => config.Iterations = 1);
+			var observer = LunyEngine.Instance.GetObserver<LunyEngineMockObserver>();
+			adapter.Run();
+
+			var callbackNames = Enum.GetNames(typeof(EngineCallback));
+			for (var i = 0; i < observer.FrameCounts.Length; i++)
+			{
+				var frameCount = observer.FrameCounts[i];
+				Assert.That(frameCount, Is.EqualTo(1), $"FrameCount is {frameCount} in {callbackNames[i]}, expected: 1");
+			}
 		}
 	}
 }

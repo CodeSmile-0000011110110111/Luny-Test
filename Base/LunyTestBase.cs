@@ -3,7 +3,7 @@ using System;
 
 namespace Luny.Test
 {
-	public abstract class LunyEngineTestBase
+	public abstract class LunyTestBase
 	{
 		internal static ILunyEngineMockAdapter CreateEngineMockAdapter(Action<ILunyEngineMockAdapter> configure = null) =>
 			LunyEngineMockAdapter.Create(configure);

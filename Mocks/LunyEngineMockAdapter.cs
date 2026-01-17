@@ -31,7 +31,7 @@ namespace Luny.Test
 	{
 		public event Action<Int32> OnEndOfFrame;
 
-		public const Int32 DefaultIterations = 10;
+		public const Int32 DefaultIterations = 5;
 		public const Int32 DefaultUpdateRate = 60;
 		public const Int32 DefaultFixedStepRate = 25;
 
