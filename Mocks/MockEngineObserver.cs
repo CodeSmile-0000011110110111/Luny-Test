@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace Luny.Test
 {
-	public sealed class LunyEngineMockObserver : ILunyEngineObserver
+	public sealed class MockEngineObserver : ILunyEngineObserver
 	{
 		private static readonly List<String> EngineCallbackNames = Enum.GetNames(typeof(EngineCallback)).ToList();
 

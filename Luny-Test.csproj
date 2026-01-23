@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="bin\**;obj\**" />
+      <None Include="Luny-Test\**\*.asmdef" />
   </ItemGroup>
 
   <ItemGroup>

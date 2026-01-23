@@ -4,7 +4,7 @@ using System;
 namespace Luny.Test
 {
 	[TestFixture]
-	public sealed class LunyEngineMockAdapterTests : LunyTestBase
+	public sealed class LunyEngineAdapterTests : LunyTestBase
 	{
 		[Test] public void Mock_MinimumParameters_UpdateAndFixedStepRunOnce()
 		{

@@ -1,12 +1,13 @@
 using Luny.Engine;
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable NotNullOrRequiredMemberIsNotInitialized
 
 namespace Luny.Test
 {
-	internal interface ILunyEngineMockAdapter
+	public interface ILunyEngineMockAdapter
 	{
 		event Action<Int32> OnEndOfFrame;
 
@@ -27,7 +28,7 @@ namespace Luny.Test
 	/// <remarks>
 	///	The assumption is that FixedStep always runs in the first frame.
 	/// </remarks>
-	internal sealed class LunyEngineMockAdapter : ILunyEngineNativeAdapter, ILunyEngineMockAdapter
+	internal sealed class MockEngineAdapter : ILunyEngineNativeAdapter, ILunyEngineMockAdapter
 	{
 		public event Action<Int32> OnEndOfFrame;
 
@@ -47,17 +48,18 @@ namespace Luny.Test
 
 		public static ILunyEngineMockAdapter Create(Action<ILunyEngineMockAdapter> configure = null)
 		{
-			var adapter = new LunyEngineMockAdapter();
+			var adapter = new MockEngineAdapter();
 			configure?.Invoke(adapter);
 			return adapter;
 		}
 
-		internal static void Teardown() => ((LunyEngineMockAdapter)s_Instance)?.Quit();
+		internal static void Teardown() => ((MockEngineAdapter)s_Instance)?.Quit();
 
-		public LunyEngineMockAdapter() => Initialize();
+		public MockEngineAdapter() => Initialize();
 
 		private void Initialize()
 		{
+			LunyLogger.Logger = new MockTraceLogger();
 			LunyTraceLogger.LogInfoInitializing(this);
 			_lunyEngine = ILunyEngineNativeAdapter.CreateEngine(ref s_Instance, this);
 			LunyTraceLogger.LogInfoInitialized(this);
@@ -103,14 +105,6 @@ namespace Luny.Test
 			ILunyEngineNativeAdapter.Startup(s_Instance, _lunyEngine);
 		}
 
-		private void FixedStep(Double delta) => ILunyEngineNativeAdapter.FixedStep(delta, s_Instance, _lunyEngine);
-
-		private void Update(Double delta)
-		{
-			ILunyEngineNativeAdapter.Update(delta, s_Instance, _lunyEngine);
-			ILunyEngineNativeAdapter.LateUpdate(delta, s_Instance, _lunyEngine);
-		}
-
 		[SuppressMessage("ReSharper", "HeuristicUnreachableCode")]
 		private void Shutdown()
 		{
@@ -121,10 +115,6 @@ namespace Luny.Test
 			{
 				ILunyEngineNativeAdapter.Shutdown(s_Instance, _lunyEngine);
 			}
-			catch (Exception ex)
-			{
-				LunyLogger.LogException(ex);
-			}
 			finally
 			{
 				ILunyEngineNativeAdapter.ShutdownComplete(s_Instance);
@@ -132,6 +122,14 @@ namespace Luny.Test
 				_lunyEngine = null;
 				s_Instance = null;
 			}
+		}
+
+		private void FixedStep(Double delta) => ILunyEngineNativeAdapter.FixedStep(delta, s_Instance, _lunyEngine);
+
+		private void Update(Double delta)
+		{
+			ILunyEngineNativeAdapter.Update(delta, s_Instance, _lunyEngine);
+			ILunyEngineNativeAdapter.LateUpdate(delta, s_Instance, _lunyEngine);
 		}
 
 		private void VerifyMockAdapterParameters()
@@ -144,6 +142,14 @@ namespace Luny.Test
 				throw new ArgumentOutOfRangeException(nameof(FixedStepRate), $"{nameof(FixedStepRate)} must be > 0, is: {FixedStepRate}");
 
 			LunyLogger.LogInfo($"Test Parameters => Iterations: {Iterations}, UpdateRate: {UpdateRate}, FixedStepRate: {FixedStepRate}", this);
+		}
+
+		private sealed class MockTraceLogger : ILunyLogger
+		{
+			public void LogInfo(String message) => Trace.WriteLine(message);
+			public void LogWarning(String message) => Trace.WriteLine($"[Warn] {message}");
+			public void LogError(String message) => Trace.WriteLine($"[ERROR] {message}");
+			public void LogException(Exception exception) => Trace.WriteLine($"[EXCEPTION] {exception}");
 		}
 	}
 }

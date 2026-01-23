@@ -38,7 +38,7 @@ namespace Luny.Test
 				config.UpdateRate = 60;
 			});
 
-			var observer = LunyEngine.Instance.GetObserver<LunyEngineMockObserver>();
+			var observer = LunyEngine.Instance.GetObserver<MockEngineObserver>();
 			adapter.Run();
 
 			// Filter out OnSceneLoaded/Unloaded if they were called (not expected here but good to be specific)
@@ -64,7 +64,7 @@ namespace Luny.Test
 				config.UpdateRate = 60;
 			});
 
-			var observer = LunyEngine.Instance.GetObserver<LunyEngineMockObserver>();
+			var observer = LunyEngine.Instance.GetObserver<MockEngineObserver>();
 			adapter.Run();
 
 			// Verify count
@@ -83,7 +83,7 @@ namespace Luny.Test
 		[Test] public void ObserverCallbacks_FrameCountInFirstFrame_IsOne()
 		{
 			var adapter = CreateEngineMockAdapter(config => config.Iterations = 1);
-			var observer = LunyEngine.Instance.GetObserver<LunyEngineMockObserver>();
+			var observer = LunyEngine.Instance.GetObserver<MockEngineObserver>();
 			adapter.Run();
 
 			var callbackNames = Enum.GetNames(typeof(EngineCallback));
