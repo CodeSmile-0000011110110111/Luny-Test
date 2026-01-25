@@ -8,7 +8,7 @@ namespace Luny.Test
 	public sealed class MockSceneService : LunySceneServiceBase, ILunySceneService
 	{
 		private MockLunyScene _currentScene;
-		private Dictionary<String, Object> _nativeObjects = new();
+		private Dictionary<String, MockNativeObject> _nativeObjects = new();
 
 		public void ReloadScene()
 		{
@@ -19,19 +19,19 @@ namespace Luny.Test
 			InvokeOnSceneLoaded(_currentScene);
 		}
 
-		public IReadOnlyList<ILunyObject> GetObjects(IReadOnlyList<String> objectNames)
+		public IReadOnlyList<ILunyObject> GetObjects(IReadOnlySet<String> objectNames)
 		{
 			if (objectNames == null || objectNames.Count == 0)
 				return Array.Empty<ILunyObject>();
 
-			var foundObjects = new ILunyObject[objectNames.Count];
-			for (var i = 0; i < objectNames.Count; i++)
+			var foundObjects = new List<ILunyObject>();
+			foreach (var nativeObject in _nativeObjects.Values)
 			{
-				var name = objectNames[i];
-				if (_nativeObjects.TryGetValue(name, out var nativeObject))
-					foundObjects[i] = MockLunyObject.ToLunyObject((MockNativeObject)nativeObject);
+				if (objectNames.Contains(nativeObject.Name))
+					foundObjects.Add(MockLunyObject.ToLunyObject(nativeObject));
 			}
-			return foundObjects;
+
+			return foundObjects.AsReadOnly();
 		}
 
 		public void AddNativeObject(MockNativeObject mockObject) => _nativeObjects.Add(mockObject.Name, mockObject);
