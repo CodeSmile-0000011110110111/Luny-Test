@@ -8,15 +8,35 @@ namespace Luny.Test
 	public sealed class MockSceneService : LunySceneServiceBase, ILunySceneService
 	{
 		private MockLunyScene _currentScene;
-		private List<ILunyObject> _sceneObjects = new();
+		private Dictionary<String, Object> _nativeObjects = new();
 
-		public void ReloadScene() => throw new NotImplementedException();
+		public void ReloadScene()
+		{
+			_nativeObjects.Clear();
+			InvokeOnSceneUnloaded(_currentScene);
 
-		public IReadOnlyList<ILunyObject> GetAllObjects() => _sceneObjects;
-		public ILunyObject FindObjectByName(String name) => throw new NotImplementedException();
+			_currentScene = new MockLunyScene(new MockNativeScene("MockScene", "MockAssets/MockScene.scene"));
+			InvokeOnSceneLoaded(_currentScene);
+		}
 
-		public void AddSceneObject(MockLunyObject mockObject) => _sceneObjects.Add(mockObject);
-		public Boolean RemoveSceneObject(MockLunyObject mockObject) => _sceneObjects.Remove(mockObject);
+		public IReadOnlyList<ILunyObject> GetObjects(IReadOnlyList<String> objectNames)
+		{
+			if (objectNames == null || objectNames.Count == 0)
+				return Array.Empty<ILunyObject>();
+
+			var foundObjects = new ILunyObject[objectNames.Count];
+			for (var i = 0; i < objectNames.Count; i++)
+			{
+				var name = objectNames[i];
+				if (_nativeObjects.TryGetValue(name, out var nativeObject))
+					foundObjects[i] = MockLunyObject.ToLunyObject((MockNativeObject)nativeObject);
+			}
+			return foundObjects;
+		}
+
+		public void AddNativeObject(MockNativeObject mockObject) => _nativeObjects.Add(mockObject.Name, mockObject);
+
+		public Boolean RemoveNativeObject(MockNativeObject mockObject) => _nativeObjects.Remove(mockObject.Name);
 
 		protected override void OnServiceInitialize() =>
 			_currentScene = new MockLunyScene(new MockNativeScene("MockScene", "MockAssets/MockScene.scene"));

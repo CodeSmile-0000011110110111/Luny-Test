@@ -13,13 +13,13 @@ namespace Luny.Test
 		public ILunyObject CreateEmpty(String name)
 		{
 			Log.Add($"{nameof(CreateEmpty)}({name})");
-			return new MockLunyObject(new MockNativeObject(name, LunyPrimitiveType.Empty.ToString()));
+			return MockLunyObject.ToLunyObject(new MockNativeObject(name, LunyPrimitiveType.Empty.ToString()));
 		}
 
 		public ILunyObject CreatePrimitive(String name, LunyPrimitiveType type)
 		{
 			Log.Add($"{nameof(CreatePrimitive)}({type},{name})");
-			return new MockLunyObject(new MockNativeObject(name, type.ToString()));
+			return MockLunyObject.ToLunyObject(new MockNativeObject(name, type.ToString()));
 		}
 	}
 }

@@ -5,8 +5,17 @@ namespace Luny.Test
 {
 	public sealed class MockLunyObject : LunyObject
 	{
-		public MockLunyObject(MockNativeObject mockObject)
-			: base(mockObject, mockObject.ID, true, true) {}
+		public static ILunyObject ToLunyObject(MockNativeObject nativeObject)
+		{
+			var instanceId = nativeObject.ID;
+			if (TryGetCached(instanceId, out var lunyObject))
+				return lunyObject;
+
+			return new MockLunyObject(nativeObject, instanceId);
+		}
+
+		private MockLunyObject(MockNativeObject mockObject, Int64 instanceId)
+			: base(mockObject, instanceId, true, true) {}
 
 		protected override String GetNativeObjectName() => Cast<MockNativeObject>().Name;
 		protected override void DestroyNativeObject() => Cast<MockNativeObject>().Destroy();
