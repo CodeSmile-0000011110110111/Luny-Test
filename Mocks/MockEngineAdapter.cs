@@ -18,8 +18,7 @@ namespace Luny.Test
 		Int32 UpdateCallCount { get; }
 		Int32 FixedStepCallCount { get; }
 
-		void Run();
-		void Quit();
+		void RunAllFrames();
 	}
 
 	/// <summary>
@@ -53,7 +52,7 @@ namespace Luny.Test
 			return adapter;
 		}
 
-		internal static void Teardown() => ((MockEngineAdapter)s_Instance)?.Quit();
+		internal static void Teardown() => ((MockEngineAdapter)s_Instance)?.Shutdown();
 
 		public MockEngineAdapter() => Initialize();
 
@@ -65,7 +64,7 @@ namespace Luny.Test
 			LunyTraceLogger.LogInfoInitialized(this);
 		}
 
-		public void Run()
+		public void RunAllFrames()
 		{
 			VerifyMockAdapterParameters();
 
@@ -92,11 +91,7 @@ namespace Luny.Test
 
 				OnEndOfFrame?.Invoke(frameCount);
 			}
-
-			Shutdown();
 		}
-
-		public void Quit() => Shutdown();
 
 		private void Startup()
 		{

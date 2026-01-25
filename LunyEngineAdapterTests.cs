@@ -15,7 +15,7 @@ namespace Luny.Test
 				config.UpdateRate = 1;
 			});
 
-			Assert.DoesNotThrow(() => adapter.Run());
+			Assert.DoesNotThrow(() => adapter.RunAllFrames());
 			Assert.That(adapter.FixedStepCallCount, Is.EqualTo(1));
 			Assert.That(adapter.UpdateCallCount, Is.EqualTo(1));
 		}
@@ -23,19 +23,19 @@ namespace Luny.Test
 		[Test] public void Mock_InvalidIterations_Throws()
 		{
 			var adapter = CreateEngineMockAdapter(config => config.Iterations = 0);
-			Assert.Throws<ArgumentOutOfRangeException>(() => adapter.Run());
+			Assert.Throws<ArgumentOutOfRangeException>(() => adapter.RunAllFrames());
 		}
 
 		[Test] public void Mock_InvalidFixedStepRate_Throws()
 		{
 			var adapter = CreateEngineMockAdapter(config => { config.FixedStepRate = 0; });
-			Assert.Throws<ArgumentOutOfRangeException>(() => adapter.Run());
+			Assert.Throws<ArgumentOutOfRangeException>(() => adapter.RunAllFrames());
 		}
 
 		[Test] public void Mock_InvalidUpdateRate_Throws()
 		{
 			var adapter = CreateEngineMockAdapter(config => { config.UpdateRate = 0; });
-			Assert.Throws<ArgumentOutOfRangeException>(() => adapter.Run());
+			Assert.Throws<ArgumentOutOfRangeException>(() => adapter.RunAllFrames());
 		}
 
 		// Documents at which FixedStep rate our mock adapter's FixedStep call count increments.
@@ -81,7 +81,7 @@ namespace Luny.Test
 				Assert.That(frameCount, Is.EqualTo(iteration));
 			};
 
-			Assert.DoesNotThrow(() => adapter.Run());
+			Assert.DoesNotThrow(() => adapter.RunAllFrames());
 			Assert.That(adapter.FixedStepCallCount, Is.EqualTo(expectedStepCount));
 			Assert.That(adapter.UpdateCallCount, Is.EqualTo(iterations));
 		}
