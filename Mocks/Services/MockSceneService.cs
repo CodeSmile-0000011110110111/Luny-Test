@@ -2,6 +2,7 @@
 using Luny.Engine.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Luny.Test
 {
@@ -19,7 +20,7 @@ namespace Luny.Test
 			InvokeOnSceneLoaded(_currentScene);
 		}
 
-		public IReadOnlyList<ILunyObject> GetObjects(IReadOnlySet<String> objectNames)
+		public IReadOnlyList<ILunyObject> GetObjects(IReadOnlyCollection<String> objectNames)
 		{
 			if (objectNames == null || objectNames.Count == 0)
 				return Array.Empty<ILunyObject>();
