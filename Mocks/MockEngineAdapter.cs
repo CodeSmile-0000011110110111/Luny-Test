@@ -19,6 +19,7 @@ namespace Luny.Test
 		Int32 FixedStepCallCount { get; }
 
 		void RunAllFrames();
+		void Quit();
 	}
 
 	/// <summary>
@@ -92,6 +93,8 @@ namespace Luny.Test
 				OnEndOfFrame?.Invoke(frameCount);
 			}
 		}
+
+		public void Quit() => Shutdown();
 
 		private void Startup()
 		{

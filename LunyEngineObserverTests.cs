@@ -31,7 +31,7 @@ namespace Luny.Test
 		[Test]
 		public void Observer_LifecycleCallOrder_IsCorrect()
 		{
-			var adapter = CreateEngineMockAdapter(config =>
+			var engine = CreateEngineMockAdapter(config =>
 			{
 				config.Iterations = 1;
 				config.FixedStepRate = 60;
@@ -39,7 +39,8 @@ namespace Luny.Test
 			});
 
 			var observer = LunyEngine.Instance.GetObserver<MockEngineObserver>();
-			adapter.RunAllFrames();
+			engine.RunAllFrames();
+			engine.Quit();
 
 			// Filter out OnSceneLoaded/Unloaded if they were called (not expected here but good to be specific)
 			var actualOrder = observer.CallOrder.Where(name => _expectedMethodCallOrder.Contains(name)).ToArray();
@@ -57,7 +58,7 @@ namespace Luny.Test
 		public void Observer_UpdateCallCount_IsCorrect()
 		{
 			var updateCount = 25;
-			var adapter = CreateEngineMockAdapter(config =>
+			var engine = CreateEngineMockAdapter(config =>
 			{
 				config.Iterations = updateCount;
 				config.FixedStepRate = 60;
@@ -65,7 +66,7 @@ namespace Luny.Test
 			});
 
 			var observer = LunyEngine.Instance.GetObserver<MockEngineObserver>();
-			adapter.RunAllFrames();
+			engine.RunAllFrames();
 
 			// Verify count
 			foreach (var methodName in _repeatingMethods)
@@ -82,9 +83,10 @@ namespace Luny.Test
 
 		[Test] public void ObserverCallbacks_FrameCountInFirstFrame_IsOne()
 		{
-			var adapter = CreateEngineMockAdapter(config => config.Iterations = 1);
+			var engine = CreateEngineMockAdapter(config => config.Iterations = 1);
 			var observer = LunyEngine.Instance.GetObserver<MockEngineObserver>();
-			adapter.RunAllFrames();
+			engine.RunAllFrames();
+			engine.Quit();
 
 			var callbackNames = Enum.GetNames(typeof(EngineCallback));
 			for (var i = 0; i < observer.FrameCounts.Length; i++)
