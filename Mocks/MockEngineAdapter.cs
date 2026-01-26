@@ -46,6 +46,8 @@ namespace Luny.Test
 		public Int32 UpdateCallCount { get; private set; }
 		public Int32 FixedStepCallCount { get; private set; }
 
+		public String EngineName => "Mock";
+
 		public static ILunyEngineMockAdapter Create(Action<ILunyEngineMockAdapter> configure = null)
 		{
 			var adapter = new MockEngineAdapter();
