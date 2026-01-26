@@ -35,6 +35,8 @@ namespace Luny.Test
 			return foundObjects.AsReadOnly();
 		}
 
+		public ILunyObject FindObjectByName(String name) => throw new NotImplementedException();
+
 		public void AddNativeObject(MockNativeObject mockObject) => _nativeObjects.Add(mockObject.Name, mockObject);
 
 		public Boolean RemoveNativeObject(MockNativeObject mockObject) => _nativeObjects.Remove(mockObject.Name);
