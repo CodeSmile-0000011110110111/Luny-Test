@@ -7,14 +7,14 @@
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <EnableDefaultItems>false</EnableDefaultItems>
-    <DefaultItemExcludes>$(DefaultItemExcludes);bin\**;obj\**</DefaultItemExcludes>
     <LangVersion>9</LangVersion>
+    <DefaultItemExcludes>$(DefaultItemExcludes);bin\**;obj\**</DefaultItemExcludes>
     <RootNamespace>Luny.Test</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="bin\**;obj\**" />
-      <None Include="Luny-Test\**\*.asmdef" />
+    <None Include="Luny-Test\**\*.asmdef" />
   </ItemGroup>
 
   <ItemGroup>
