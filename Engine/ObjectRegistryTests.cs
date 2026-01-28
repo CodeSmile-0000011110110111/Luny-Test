@@ -3,7 +3,7 @@ using Luny.Engine;
 using NUnit.Framework;
 using System.Linq;
 
-namespace Luny.Test
+namespace Luny.Test.Engine
 {
 	public abstract class ObjectRegistryTests : ContractTestBase
 	{

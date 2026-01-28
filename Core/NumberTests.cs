@@ -2,11 +2,25 @@ using NUnit.Framework;
 using System;
 using System.Globalization;
 
-namespace Luny.Test
+namespace Luny.Test.Core
 {
 	[TestFixture]
-	public class LunyNumberTests
+	public sealed class NumberTests
 	{
+		[Test]
+		public void TestToTimeSpan()
+		{
+			var ts = TimeSpan.FromSeconds(1);
+			Number n = ts;
+			Assert.That(n.ToTimeSpan(null), Is.EqualTo(ts));
+
+			// Test clamping for ToTimeSpan
+			Number large = 1e30;
+			Assert.That(large.ToTimeSpan(null).Ticks, Is.EqualTo(Int64.MaxValue));
+			Number small = -1e30;
+			Assert.That(small.ToTimeSpan(null).Ticks, Is.EqualTo(Int64.MinValue));
+		}
+
 		[Test]
 		public void TestArithmeticWithBool()
 		{
@@ -25,7 +39,15 @@ namespace Luny.Test
 			});
 			Assert.Throws<InvalidOperationException>(() =>
 			{
+				var x = true - n;
+			});
+			Assert.Throws<InvalidOperationException>(() =>
+			{
 				var x = n * true;
+			});
+			Assert.Throws<InvalidOperationException>(() =>
+			{
+				var x = true * n;
 			});
 			Assert.Throws<InvalidOperationException>(() =>
 			{
@@ -33,7 +55,15 @@ namespace Luny.Test
 			});
 			Assert.Throws<InvalidOperationException>(() =>
 			{
+				var x = true / n;
+			});
+			Assert.Throws<InvalidOperationException>(() =>
+			{
 				var x = n % true;
+			});
+			Assert.Throws<InvalidOperationException>(() =>
+			{
+				var x = true % n;
 			});
 		}
 
@@ -55,7 +85,15 @@ namespace Luny.Test
 			});
 			Assert.Throws<InvalidOperationException>(() =>
 			{
+				var x = "10" - n;
+			});
+			Assert.Throws<InvalidOperationException>(() =>
+			{
 				var x = n * "10";
+			});
+			Assert.Throws<InvalidOperationException>(() =>
+			{
+				var x = "10" * n;
 			});
 			Assert.Throws<InvalidOperationException>(() =>
 			{
@@ -63,7 +101,15 @@ namespace Luny.Test
 			});
 			Assert.Throws<InvalidOperationException>(() =>
 			{
+				var x = "10" / n;
+			});
+			Assert.Throws<InvalidOperationException>(() =>
+			{
 				var x = n % "10";
+			});
+			Assert.Throws<InvalidOperationException>(() =>
+			{
+				var x = "10" % n;
 			});
 		}
 
@@ -74,6 +120,13 @@ namespace Luny.Test
 			Assert.That((Double)new Number("abc"), Is.EqualTo(0.0));
 			Assert.That((Double)new Number(""), Is.EqualTo(0.0));
 			Assert.That((Double)new Number(null), Is.EqualTo(0.0));
+		}
+
+		[Test]
+		public void TestBoolConversion()
+		{
+			Assert.That((Double)new Number(true), Is.EqualTo(1.0));
+			Assert.That((Double)new Number(false), Is.EqualTo(0.0));
 		}
 
 		[Test]
@@ -220,7 +273,9 @@ namespace Luny.Test
 
 			Assert.That(a.CompareTo((Object)5.0d), Is.GreaterThan(0));
 			Assert.That(a.CompareTo((Object)10.0d), Is.EqualTo(0));
+			Assert.That(a.CompareTo(null), Is.EqualTo(1));
 
+			Assert.That(a.CompareTo(5.0d), Is.GreaterThan(0));
 			Assert.That(a.CompareTo((Int64)5), Is.GreaterThan(0));
 			Assert.That(a.CompareTo((UInt64)5), Is.GreaterThan(0));
 
@@ -238,7 +293,9 @@ namespace Luny.Test
 			Assert.That(a.Equals(b), Is.False);
 			Assert.That(a.Equals((Object)10.0d), Is.True);
 			Assert.That(a.Equals((Object)5.0d), Is.False);
+			Assert.That(a.Equals(new Object()), Is.False);
 
+			Assert.That(a.Equals(10.0d), Is.True);
 			Assert.That(a.Equals((Int64)10), Is.True);
 			Assert.That(a.Equals((UInt64)10), Is.True);
 		}
@@ -256,6 +313,52 @@ namespace Luny.Test
 			Number a = 10;
 			Number b = 10;
 			Assert.That(a.GetHashCode(), Is.EqualTo(b.GetHashCode()));
+		}
+
+		[Test]
+		public void TestNumberEqualsGaps()
+		{
+			Number n = 10.0;
+	// IEquatable<Int64>
+			Assert.That(n.Equals(10L), Is.True);
+			Assert.That(n.Equals(5L), Is.False);
+
+			// IEquatable<UInt64>
+			Assert.That(n.Equals(10UL), Is.True);
+			Assert.That(n.Equals(5UL), Is.False);
+
+			// Equals(Object) with Int64/UInt64
+			Assert.That(n.Equals((Object)10L), Is.True);
+			Assert.That(n.Equals((Object)10UL), Is.True);
+
+			// Equals(Object) with Single/Int32/UInt32
+			Assert.That(n.Equals((Object)10.0f), Is.True);
+			Assert.That(n.Equals((Object)10), Is.True);
+			Assert.That(n.Equals((Object)10U), Is.True);
+
+			// Edge case: NaN
+			Number nan = Double.NaN;
+			Assert.That(nan.Equals(Double.NaN), Is.True);
+			// In double comparisons, NaN != NaN. But double.Equals(double) is true for both NaN.
+			// Number uses double.Equals internally for both Equals and operator ==.
+			Assert.That((Double)nan == Double.NaN, Is.False);
+			Assert.That(nan == Double.NaN, Is.True);
+		}
+
+		[Test]
+		public void TestNumberCompareToGaps()
+		{
+			Number n = 10.0;
+
+			// IComparable<Int64>
+			Assert.That(n.CompareTo(10L), Is.EqualTo(0));
+			Assert.That(n.CompareTo(5L), Is.GreaterThan(0));
+			Assert.That(n.CompareTo(15L), Is.LessThan(0));
+
+			// IComparable<UInt64>
+			Assert.That(n.CompareTo(10UL), Is.EqualTo(0));
+			Assert.That(n.CompareTo(5UL), Is.GreaterThan(0));
+			Assert.That(n.CompareTo(15UL), Is.LessThan(0));
 		}
 	}
 }
