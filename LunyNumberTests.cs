@@ -174,7 +174,9 @@ namespace Luny.Test
 			Assert.That(a >= b, Is.True);
 			Assert.That(a >= c, Is.True);
 			Assert.That(b <= a, Is.True);
+#pragma warning disable 1718 // comparison made to same variable
 			Assert.That(b <= b, Is.True);
+#pragma warning restore 1718
 		}
 
 		[Test]
