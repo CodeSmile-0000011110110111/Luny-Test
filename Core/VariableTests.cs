@@ -335,7 +335,7 @@ namespace Luny.Test.Core
 			Assert.That(vNum.Equals((Object)10U), Is.True);
 			Assert.That(vNum.Equals((Object)10UL), Is.True);
 
-			// Equals(String) gaps
+			// Equals(String)
 			Assert.That(vStr.Equals((String)null), Is.False);
 			Assert.That(vNull.Equals((String)null), Is.False); // _type is Null, not String
 

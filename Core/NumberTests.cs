@@ -316,7 +316,7 @@ namespace Luny.Test.Core
 		}
 
 		[Test]
-		public void TestNumberEqualsGaps()
+		public void TestNumberEquals()
 		{
 			Number n = 10.0;
 	// IEquatable<Int64>
@@ -346,7 +346,7 @@ namespace Luny.Test.Core
 		}
 
 		[Test]
-		public void TestNumberCompareToGaps()
+		public void TestNumberCompareTo()
 		{
 			Number n = 10.0;
 
