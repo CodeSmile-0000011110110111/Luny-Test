@@ -1,6 +1,5 @@
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Luny.Test.Core
@@ -117,9 +116,10 @@ namespace Luny.Test.Core
 			String changedName = null;
 			Variable changedCurrent = null;
 			Variable changedPrevious = null;
-			Int32 callCount = 0;
+			var callCount = 0;
 
-			table.OnVariableChanged += (sender, args) => {
+			table.OnVariableChanged += (sender, args) =>
+			{
 				changedName = args.Name;
 				changedCurrent = args.Current;
 				changedPrevious = args.Previous;

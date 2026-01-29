@@ -319,7 +319,7 @@ namespace Luny.Test.Core
 		public void TestNumberEquals()
 		{
 			Number n = 10.0;
-	// IEquatable<Int64>
+			// IEquatable<Int64>
 			Assert.That(n.Equals(10L), Is.True);
 			Assert.That(n.Equals(5L), Is.False);
 
