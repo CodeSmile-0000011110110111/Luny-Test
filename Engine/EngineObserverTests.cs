@@ -1,6 +1,7 @@
 using Luny.ContractTest;
 using Luny.Engine;
 using Luny.Engine.Bridge;
+using Luny.Engine.Bridge.Enums;
 using Luny.Engine.Services;
 using NUnit.Framework;
 using System;
