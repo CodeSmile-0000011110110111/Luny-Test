@@ -18,7 +18,7 @@ namespace Luny.Test.Core
 			Assert.That((Int32)table["key1"], Is.EqualTo(123));
 			Assert.That((String)table["key2"], Is.EqualTo("value2"));
 			Assert.That(table["key3"].Type, Is.EqualTo(Variable.ValueType.String));
-			Assert.That(table["key3"].AsString(), Is.Null);
+			Assert.That(table["key3"].AsString(), Is.EqualTo(String.Empty));
 		}
 
 		[Test]
@@ -39,7 +39,7 @@ namespace Luny.Test.Core
 			table.Remove("key1");
 			Assert.That(table.Count, Is.EqualTo(1));
 
-			table.Clear();
+			table.RemoveAll();
 			Assert.That(table.Count, Is.EqualTo(0));
 		}
 
@@ -84,7 +84,7 @@ namespace Luny.Test.Core
 			table["key1"] = 1;
 			table["key2"] = 2;
 
-			table.Clear();
+			table.RemoveAll();
 
 			Assert.That(table.Count, Is.EqualTo(0));
 			Assert.That(table.Has("key1"), Is.False);
@@ -130,8 +130,8 @@ namespace Luny.Test.Core
 			Assert.That(callCount, Is.EqualTo(1));
 			Assert.That(changedName, Is.EqualTo("var1"));
 			Assert.That((Int32)changedCurrent, Is.EqualTo(10));
-			Assert.That(changedPrevious.Type, Is.EqualTo(Variable.ValueType.String));
-			Assert.That(changedPrevious.AsString(), Is.Null);
+			Assert.That(changedPrevious.Type, Is.EqualTo(Variable.ValueType.Null));
+			Assert.That(changedPrevious.AsString(), Is.EqualTo(String.Empty));
 
 			table["var1"] = 20;
 			Assert.That(callCount, Is.EqualTo(2));

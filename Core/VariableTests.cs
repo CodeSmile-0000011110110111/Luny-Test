@@ -295,7 +295,7 @@ namespace Luny.Test.Core
 			Assert.That(vNull.AsSingle(), Is.EqualTo(0f));
 			Assert.That(vNull.AsInt64(), Is.EqualTo(0L));
 			Assert.That(vNull.AsInt32(), Is.EqualTo(0));
-			Assert.That(vNull.AsString(), Is.Null);
+			Assert.That(vNull.AsString(), Is.EqualTo(String.Empty));
 			Assert.That((Double)vNull.AsNumber(), Is.EqualTo(0.0));
 			Assert.That(vNull.AsDouble(), Is.EqualTo(0.0));
 			Assert.That(vNull.AsBoolean(), Is.False);
@@ -321,7 +321,7 @@ namespace Luny.Test.Core
 		}
 
 		[Test]
-		public void TestVariableEqualsGaps()
+		public void TestVariableEquals()
 		{
 			var vNum = (Variable)10.0;
 			var vBool = (Variable)true;
