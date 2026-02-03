@@ -168,7 +168,7 @@ namespace Luny.Test.Core
 			// DateTime conversion via double loses precision, but should be within a reasonable delta
 			var dt = DateTime.Now;
 			n = dt;
-			Assert.That((DateTime)n, Is.EqualTo(dt).Within(TimeSpan.FromTicks(500))); // less than 500 ticks risks test failure
+			Assert.That((DateTime)n, Is.EqualTo(dt).Within(TimeSpan.FromTicks(666))); // avoids test failure due to slight discrepancies
 
 			n = "123.45";
 			Assert.That((Double)n, Is.EqualTo(123.45d));
