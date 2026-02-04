@@ -131,7 +131,7 @@ namespace Luny.Test.Core
 			Assert.That(changedName, Is.EqualTo("var1"));
 			Assert.That((Int32)changedCurrent, Is.EqualTo(10));
 			Assert.That(changedPrevious.Type, Is.EqualTo(Variable.ValueType.Null));
-			Assert.That(changedPrevious.AsString(), Is.EqualTo(String.Empty));
+			Assert.That(changedPrevious.AsString(), Is.EqualTo(null));
 
 			table["var1"] = 20;
 			Assert.That(callCount, Is.EqualTo(2));
