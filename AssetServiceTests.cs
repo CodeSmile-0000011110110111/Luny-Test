@@ -1,7 +1,6 @@
-using Luny.Engine.Bridge;
 using Luny.ContractTest.Mocks;
+using Luny.Engine.Bridge;
 using NUnit.Framework;
-using System;
 
 namespace Luny.Test
 {
@@ -20,17 +19,14 @@ namespace Luny.Test
 		}
 
 		[TearDown]
-		public void TearDown()
-		{
-			LunyPath.Converter = null;
-		}
+		public void TearDown() => LunyPath.Converter = null;
 
 		[Test]
 		public void Path_Normalization_Works()
 		{
 			var path = LunyAssetPath.FromNative("Assets\\Resources\\Prefabs\\Player");
 			Assert.That(path.AgnosticPath, Is.EqualTo("Prefabs/Player"));
-			
+
 			var path2 = LunyAssetPath.FromNative("res://Prefabs/Player");
 			Assert.That(path2.AgnosticPath, Is.EqualTo("Prefabs/Player"));
 		}
@@ -46,7 +42,7 @@ namespace Luny.Test
 
 			// Load by agnostic path
 			var loaded = _assetService.Load<ILunyPrefab>("Prefabs/Player");
-			
+
 			Assert.That(loaded, Is.Not.Null);
 			Assert.That(loaded.AssetPath.NativePath, Is.EqualTo(nativePath));
 		}
@@ -62,7 +58,7 @@ namespace Luny.Test
 
 			// Load by agnostic path
 			var loaded = _assetService.Load<ILunyPrefab>("Prefabs/Player");
-			
+
 			Assert.That(loaded, Is.Not.Null);
 			Assert.That(loaded.AssetPath.NativePath, Is.EqualTo(nativePath));
 		}
@@ -71,7 +67,7 @@ namespace Luny.Test
 		public void Asset_Load_ReturnsPlaceholder_OnFailure()
 		{
 			var loaded = _assetService.Load<ILunyPrefab>("NonExistent");
-			
+
 			Assert.That(loaded, Is.Not.Null);
 			Assert.That(loaded, Is.InstanceOf<MockPrefab>());
 			Assert.That(((MockPrefab)loaded).IsPlaceholder, Is.True);
