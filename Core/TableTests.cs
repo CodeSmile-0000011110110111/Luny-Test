@@ -109,6 +109,54 @@ namespace Luny.Test.Core
 		}
 
 		[Test]
+		public void DefineConstant_Creates_ReadOnly_Handle()
+		{
+			var table = new Table();
+			var handle = table.DefineConstant("PI", 3.14159);
+
+			Assert.That(handle.IsConstant, Is.True);
+			Assert.That(handle.Name, Is.EqualTo("PI"));
+			Assert.That((Double)handle.Value, Is.EqualTo(3.14159).Within(0.00001));
+		}
+
+		[Test]
+		public void DefineConstant_Modification_Throws()
+		{
+			var table = new Table();
+			table.DefineConstant("PI", 3.14159);
+
+			Assert.Throws<InvalidOperationException>(() => table["PI"] = 4);
+		}
+
+		[Test]
+		public void DefineConstant_Handle_Modification_Throws()
+		{
+			var table = new Table();
+			var handle = table.DefineConstant("PI", 3.14159);
+
+			Assert.Throws<InvalidOperationException>(() => handle.Value = 4);
+		}
+		[Test]
+		public void DefineConstant_Redefinition_Throws()
+		{
+			var table = new Table();
+			table.DefineConstant("PI", 3.14159);
+
+			Assert.Throws<InvalidOperationException>(() => table.DefineConstant("PI", 6.28318));
+		}
+
+		[Test]
+		public void GetHandle_Returns_Non_Constant_Handle()
+		{
+			var table = new Table();
+			var handle = table.GetHandle("mutable");
+
+			Assert.That(handle.IsConstant, Is.False);
+			handle.Value = 123;
+			Assert.That((Int32)handle.Value, Is.EqualTo(123));
+		}
+
+		[Test]
 		public void TestOnVariableChangedEvent()
 		{
 #if DEBUG || LUNYSCRIPT_DEBUG
