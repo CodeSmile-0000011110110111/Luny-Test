@@ -20,11 +20,11 @@ namespace Luny.Test.Engine
 			{
 				nameof(ILunyEngineObserver.OnEngineStartup),
 				nameof(ILunyEngineObserver.OnSceneLoaded),
-				nameof(ILunyEngineObserver.OnEnginePreUpdate),
-				nameof(ILunyEngineObserver.OnEngineFixedStep),
-				nameof(ILunyEngineObserver.OnEngineUpdate),
-				nameof(ILunyEngineObserver.OnEngineLateUpdate),
-				nameof(ILunyEngineObserver.OnEnginePostUpdate),
+				nameof(ILunyEngineObserver.OnEngineFrameBegins),
+				nameof(ILunyEngineObserver.OnEngineHeartbeat),
+				nameof(ILunyEngineObserver.OnEngineFrameUpdate),
+				nameof(ILunyEngineObserver.OnEngineFrameLateUpdate),
+				nameof(ILunyEngineObserver.OnEngineFrameEnds),
 				nameof(ILunyEngineObserver.OnEngineShutdown),
 			};
 
@@ -49,11 +49,11 @@ namespace Luny.Test.Engine
 		{
 			String[] repeatingMethods =
 			{
-				nameof(ILunyEngineObserver.OnEnginePreUpdate),
-				nameof(ILunyEngineObserver.OnEngineFixedStep),
-				nameof(ILunyEngineObserver.OnEngineUpdate),
-				nameof(ILunyEngineObserver.OnEngineLateUpdate),
-				nameof(ILunyEngineObserver.OnEnginePostUpdate),
+				nameof(ILunyEngineObserver.OnEngineFrameBegins),
+				nameof(ILunyEngineObserver.OnEngineHeartbeat),
+				nameof(ILunyEngineObserver.OnEngineFrameUpdate),
+				nameof(ILunyEngineObserver.OnEngineFrameLateUpdate),
+				nameof(ILunyEngineObserver.OnEngineFrameEnds),
 			};
 
 			var updateCount = 3;
@@ -87,14 +87,15 @@ namespace Luny.Test.Engine
 
 	internal sealed class MockEngineObserver : ILunyEngineObserver
 	{
+		// CAUTION: must match names of corresponding ILunyEngineObserver methods, otherwise tests fail!
 		public enum CallbackMethod
 		{
 			OnEngineStartup,
-			OnEnginePreUpdate,
-			OnEngineFixedStep,
-			OnEngineUpdate,
-			OnEngineLateUpdate,
-			OnEnginePostUpdate,
+			OnEngineFrameBegins,
+			OnEngineHeartbeat,
+			OnEngineFrameUpdate,
+			OnEngineFrameLateUpdate,
+			OnEngineFrameEnds,
 			OnEngineShutdown,
 		}
 
@@ -110,35 +111,35 @@ namespace Luny.Test.Engine
 			FrameCounts[GetEngineCallbackIndex()] = LunyEngine.Instance.Time.FrameCount;
 		}
 
-		public void OnEnginePreUpdate()
+		public void OnEngineFrameBegins()
 		{
 			CallOrder.Add(ILunyDebugService.GetMethodName());
 			RepeatingCallOrder.Add(ILunyDebugService.GetMethodName());
 			FrameCounts[GetEngineCallbackIndex()] = LunyEngine.Instance.Time.FrameCount;
 		}
 
-		public void OnEngineFixedStep(Double fixedDeltaTime)
+		public void OnEngineHeartbeat(Double fixedDeltaTime)
 		{
 			CallOrder.Add(ILunyDebugService.GetMethodName());
 			RepeatingCallOrder.Add(ILunyDebugService.GetMethodName());
 			FrameCounts[GetEngineCallbackIndex()] = LunyEngine.Instance.Time.FrameCount;
 		}
 
-		public void OnEngineUpdate(Double deltaTime)
+		public void OnEngineFrameUpdate(Double deltaTime)
 		{
 			CallOrder.Add(ILunyDebugService.GetMethodName());
 			RepeatingCallOrder.Add(ILunyDebugService.GetMethodName());
 			FrameCounts[GetEngineCallbackIndex()] = LunyEngine.Instance.Time.FrameCount;
 		}
 
-		public void OnEngineLateUpdate(Double deltaTime)
+		public void OnEngineFrameLateUpdate(Double deltaTime)
 		{
 			CallOrder.Add(ILunyDebugService.GetMethodName());
 			RepeatingCallOrder.Add(ILunyDebugService.GetMethodName());
 			FrameCounts[GetEngineCallbackIndex()] = LunyEngine.Instance.Time.FrameCount;
 		}
 
-		public void OnEnginePostUpdate()
+		public void OnEngineFrameEnds()
 		{
 			CallOrder.Add(ILunyDebugService.GetMethodName());
 			RepeatingCallOrder.Add(ILunyDebugService.GetMethodName());
