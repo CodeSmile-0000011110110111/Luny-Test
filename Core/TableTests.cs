@@ -136,6 +136,7 @@ namespace Luny.Test.Core
 
 			Assert.Throws<InvalidOperationException>(() => handle.Value = 4);
 		}
+
 		[Test]
 		public void DefineConstant_Redefinition_Throws()
 		{
