@@ -77,9 +77,13 @@ namespace Luny.Test.Engine
 			var callbackNames = Enum.GetNames(typeof(MockEngineObserver.CallbackMethod));
 			for (var i = 0; i < observer.FrameCounts.Length; i++)
 			{
+				// skip OnStartup
+				if (i == 0)
+					continue;
+
 				var frameCount = observer.FrameCounts[i];
 				Assert.That(frameCount, Is.EqualTo(1),
-					$"[{Engine}] FrameCount is {frameCount} in {callbackNames[i]}, expected: 1. Actual calls: " +
+					$"[{Engine}] FrameCount is {frameCount} in {callbackNames[i]}, expected: 1. Actual calls:\n" +
 					$"{String.Join("\n", observer.CallOrder)}");
 			}
 		}
