@@ -122,21 +122,21 @@ namespace Luny.Test.Engine
 			FrameCounts[GetEngineCallbackIndex()] = LunyEngine.Instance.Time.FrameCount;
 		}
 
-		public void OnEngineHeartbeat(Double fixedDeltaTime)
+		public void OnEngineHeartbeat()
 		{
 			CallOrder.Add(ILunyDebugService.GetMethodName());
 			RepeatingCallOrder.Add(ILunyDebugService.GetMethodName());
 			FrameCounts[GetEngineCallbackIndex()] = LunyEngine.Instance.Time.FrameCount;
 		}
 
-		public void OnEngineFrameUpdate(Double deltaTime)
+		public void OnEngineFrameUpdate()
 		{
 			CallOrder.Add(ILunyDebugService.GetMethodName());
 			RepeatingCallOrder.Add(ILunyDebugService.GetMethodName());
 			FrameCounts[GetEngineCallbackIndex()] = LunyEngine.Instance.Time.FrameCount;
 		}
 
-		public void OnEngineFrameLateUpdate(Double deltaTime)
+		public void OnEngineFrameLateUpdate()
 		{
 			CallOrder.Add(ILunyDebugService.GetMethodName());
 			RepeatingCallOrder.Add(ILunyDebugService.GetMethodName());
