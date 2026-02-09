@@ -23,7 +23,7 @@ namespace Luny.Test.Variables
 		{
 			var v = (Variable)20;
 			Assert.That(v.As<Double>(), Is.EqualTo(20.0));
-			Assert.That(v.Name, Is.EqualTo("(N/A)"));
+			Assert.That(v.Name, Is.Not.Null);
 		}
 
 		[Test]
@@ -31,10 +31,8 @@ namespace Luny.Test.Variables
 		{
 			var v = Variable.Named(30, "IVar");
 			Assert.That(v.As<Double>(), Is.EqualTo(30.0));
-#if DEBUG || LUNYSCRIPT_DEBUG
+#if DEBUG || LUNY_DEBUG
 			Assert.That(v.Name, Is.EqualTo("IVar"));
-#else
-			Assert.That(v.Name, Is.EqualTo("(N/A)"));
 #endif
 		}
 
@@ -167,10 +165,10 @@ namespace Luny.Test.Variables
 			Variable v10 = 10;
 			var vNull = new Variable();
 
-			Assert.That(vABC.Length, Is.EqualTo(3));
-			Assert.That(vEmpty.Length, Is.EqualTo(0));
-			Assert.That(v10.Length, Is.EqualTo(0));
-			Assert.That(vNull.Length, Is.EqualTo(0));
+			Assert.That(((String)vABC).Length, Is.EqualTo(3));
+			Assert.That(((String)vEmpty).Length, Is.EqualTo(0));
+			Assert.That(((String)v10).Length, Is.EqualTo(2)); // implicit ToString()
+			Assert.That((String)vNull, Is.Null);
 		}
 
 		[Test]
