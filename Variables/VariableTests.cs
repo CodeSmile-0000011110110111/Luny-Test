@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using System;
 
-namespace Luny.Test.Core
+namespace Luny.Test.Variables
 {
 	[TestFixture]
 	public sealed class VariableTests

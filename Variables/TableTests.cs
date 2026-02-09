@@ -2,7 +2,7 @@ using NUnit.Framework;
 using System;
 using System.Linq;
 
-namespace Luny.Test.Core
+namespace Luny.Test.Variables
 {
 	[TestFixture]
 	public sealed class TableTests
