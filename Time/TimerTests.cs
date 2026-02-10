@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using System;
 
 namespace Luny.Test.Time
 {
@@ -9,12 +8,12 @@ namespace Luny.Test.Time
 		[Test]
 		public void Elapses_After_Duration()
 		{
-			var timer = Luny.Timer.FromSeconds(1.0);
-			Int32 calls = 0;
+			var timer = Timer.FromSeconds(1.0);
+			var calls = 0;
 			timer.OnElapsed += () => calls++;
 			timer.Start();
 
-			for (Int32 i = 0; i < 9; i++)
+			for (var i = 0; i < 9; i++)
 				timer.Tick(0.1);
 
 			Assert.That(calls, Is.EqualTo(0));
@@ -27,13 +26,13 @@ namespace Luny.Test.Time
 		[Test]
 		public void AutoRepeat_Fires_Multiple_Times()
 		{
-			var timer = Luny.Timer.FromSeconds(0.25);
-			Int32 calls = 0;
+			var timer = Timer.FromSeconds(0.25);
+			var calls = 0;
 			timer.OnElapsed += () => calls++;
 			timer.AutoRepeat = true;
 			timer.Start();
 
-			for (Int32 i = 0; i < 12; i++)
+			for (var i = 0; i < 12; i++)
 				timer.Tick(0.1);
 
 			Assert.That(calls, Is.GreaterThanOrEqualTo(3));
@@ -43,22 +42,22 @@ namespace Luny.Test.Time
 		[Test]
 		public void IsRunning_Used_For_Pause_Resume()
 		{
-			var timer = Luny.Timer.FromSeconds(1.0);
-			Int32 calls = 0;
+			var timer = Timer.FromSeconds(1.0);
+			var calls = 0;
 			timer.OnElapsed += () => calls++;
 			timer.Start();
 
-			for (Int32 i = 0; i < 5; i++)
+			for (var i = 0; i < 5; i++)
 				timer.Tick(0.1);
 
 			timer.Pause();
-			for (Int32 i = 0; i < 20; i++)
+			for (var i = 0; i < 20; i++)
 				timer.Tick(0.1);
 
 			Assert.That(calls, Is.EqualTo(0));
 
 			timer.Resume();
-			for (Int32 i = 0; i < 5; i++)
+			for (var i = 0; i < 5; i++)
 				timer.Tick(0.1);
 
 			Assert.That(calls, Is.EqualTo(1));
@@ -67,13 +66,13 @@ namespace Luny.Test.Time
 		[Test]
 		public void TimeScale_Affects_Speed()
 		{
-			var timer = Luny.Timer.FromSeconds(1.0);
-			Int32 calls = 0;
+			var timer = Timer.FromSeconds(1.0);
+			var calls = 0;
 			timer.OnElapsed += () => calls++;
 			timer.TimeScale = 0.5; // half speed => takes twice as long
 			timer.Start();
 
-			for (Int32 i = 0; i < 19; i++)
+			for (var i = 0; i < 19; i++)
 				timer.Tick(0.1);
 
 			Assert.That(calls, Is.EqualTo(0));
@@ -85,7 +84,7 @@ namespace Luny.Test.Time
 		[Test]
 		public void ToString_Default_Is_mm_ss()
 		{
-			var timer = Luny.Timer.FromSeconds(10.0);
+			var timer = Timer.FromSeconds(10.0);
 			timer.Start();
 			timer.Tick(1.0);
 			var s = timer.ToString();
@@ -95,7 +94,7 @@ namespace Luny.Test.Time
 		[Test]
 		public void Remaining_Properties_Work()
 		{
-			var timer = Luny.Timer.FromSeconds(1.0);
+			var timer = Timer.FromSeconds(1.0);
 			timer.Start();
 			timer.Tick(0.4);
 
@@ -107,7 +106,7 @@ namespace Luny.Test.Time
 		[Test]
 		public void Stop_Resets_Current()
 		{
-			var timer = Luny.Timer.FromSeconds(1.0);
+			var timer = Timer.FromSeconds(1.0);
 			timer.Start();
 			timer.Tick(0.5);
 			Assert.That(timer.Current, Is.EqualTo(0.5).Within(1e-9));
