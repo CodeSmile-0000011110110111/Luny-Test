@@ -163,13 +163,13 @@ namespace Luny.Test.Engine
 	}
 
 	[TestFixture]
-	public sealed class GodotEngineObserverTests : EngineObserverTests
+	public sealed class EngineObserverGodotTests : EngineObserverTests
 	{
 		protected override NativeEngine Engine => NativeEngine.Godot;
 	}
 
 	[TestFixture]
-	public sealed class UnityEngineObserverTests : EngineObserverTests
+	public sealed class EngineObserverUnityTests : EngineObserverTests
 	{
 		protected override NativeEngine Engine => NativeEngine.Unity;
 	}

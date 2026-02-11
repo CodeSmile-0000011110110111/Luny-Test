@@ -36,13 +36,13 @@ namespace Luny.Test.Engine
 	}
 
 	[TestFixture]
-	public sealed class GodotObjectRegistryTests : ObjectRegistryTests
+	public sealed class ObjectRegistryGodotTests : ObjectRegistryTests
 	{
 		protected override NativeEngine Engine => NativeEngine.Godot;
 	}
 
 	[TestFixture]
-	public sealed class UnityObjectRegistryTests : ObjectRegistryTests
+	public sealed class ObjectRegistryUnityTests : ObjectRegistryTests
 	{
 		protected override NativeEngine Engine => NativeEngine.Unity;
 	}
