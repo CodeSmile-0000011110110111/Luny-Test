@@ -66,7 +66,7 @@ namespace Luny.Test
 		[Test]
 		public void Asset_Load_ReturnsPlaceholder_OnFailure()
 		{
-			var loaded = _assetService.Load<ILunyPrefab>("NonExistent");
+			var loaded = _assetService.Load<LunyPrefab>("NonExistent");
 
 			Assert.That(loaded, Is.Not.Null);
 			Assert.That(loaded, Is.InstanceOf<MockPrefab>());
