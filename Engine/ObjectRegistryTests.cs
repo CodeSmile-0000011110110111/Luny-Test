@@ -1,5 +1,5 @@
 using Luny.ContractTest;
-using Luny.Engine.Bridge.Enums;
+using Luny.Engine.Bridge;
 using NUnit.Framework;
 using System.Linq;
 
