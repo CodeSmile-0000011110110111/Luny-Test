@@ -11,12 +11,12 @@ namespace Luny.Test.Engine
 	internal sealed class TestInputService : LunyInputServiceBase, ILunyInputService
 	{
 		public void SimulateAxisInput(String actionName, LunyVector2 value) =>
-			RaiseAxisInput(actionName, value);
+			RaiseDirectionalInput(actionName, value);
 
 		public void SimulateButtonInput(String actionName, Boolean pressed, Single analogValue = 1f) =>
 			RaiseButtonInput(actionName, pressed, analogValue);
 
-		public void SimulatePreUpdate() => OnServicePreUpdate();
+		public void SimulatePostUpdate() => OnServicePostUpdate();
 	}
 
 	[TestFixture]
@@ -43,13 +43,13 @@ namespace Luny.Test.Engine
 		}
 
 		[Test]
-		public void GetAxisValue_Persists_Across_Frames()
+		public void GetAxisValue_Resets_On_PostUpdate()
 		{
 			var vec = new LunyVector2(1f, 0f);
 			_service.SimulateAxisInput("Move", vec);
-			_service.SimulatePreUpdate();
+			_service.SimulatePostUpdate();
 
-			Assert.That(_service.GetAxisValue("Move"), Is.EqualTo(vec));
+			Assert.That(_service.GetAxisValue("Move"), Is.EqualTo(LunyVector2.Zero));
 		}
 
 		[Test]
@@ -81,19 +81,20 @@ namespace Luny.Test.Engine
 		public void GetButtonJustPressed_False_After_PreUpdate()
 		{
 			_service.SimulateButtonInput("Jump", true);
-			_service.SimulatePreUpdate();
+			_service.SimulatePostUpdate();
 
 			Assert.That(_service.GetButtonJustPressed("Jump"), Is.False);
 		}
 
 		[Test]
-		public void GetButtonJustPressed_False_On_Sustained_Hold()
+		public void GetButtonJustPressed_True_On_Sustained_Hold_After_Reset()
 		{
 			_service.SimulateButtonInput("Jump", true);
-			_service.SimulatePreUpdate();
+			_service.SimulatePostUpdate();
 			_service.SimulateButtonInput("Jump", true);
 
-			Assert.That(_service.GetButtonJustPressed("Jump"), Is.False);
+			// After PreUpdate, state resets, so the next press is treated as a new press
+			Assert.That(_service.GetButtonJustPressed("Jump"), Is.True);
 			Assert.That(_service.GetButtonPressed("Jump"), Is.True);
 		}
 
@@ -101,9 +102,9 @@ namespace Luny.Test.Engine
 		public void GetButtonJustPressed_True_After_Release_And_Repress()
 		{
 			_service.SimulateButtonInput("Jump", true);
-			_service.SimulatePreUpdate();
+			_service.SimulatePostUpdate();
 			_service.SimulateButtonInput("Jump", false);
-			_service.SimulatePreUpdate();
+			_service.SimulatePostUpdate();
 			_service.SimulateButtonInput("Jump", true);
 
 			Assert.That(_service.GetButtonJustPressed("Jump"), Is.True);
