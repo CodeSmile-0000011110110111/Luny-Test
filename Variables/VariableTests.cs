@@ -319,6 +319,46 @@ namespace Luny.Test.Variables
 		}
 
 		[Test]
+		public void TestVector2Variable()
+		{
+			var vec = new LunyVector2(3f, 4f);
+			var v = Variable.FromVector2(vec);
+
+			Assert.That(v.Type, Is.EqualTo(Variable.ValueType.Vector2));
+			Assert.That(v.AsVector2().X, Is.EqualTo(3f));
+			Assert.That(v.AsVector2().Y, Is.EqualTo(4f));
+			Assert.That(v.As<LunyVector2>(), Is.EqualTo(vec));
+			Assert.That(v.AsVector3(), Is.EqualTo(default(LunyVector3)));
+			Assert.That(v.AsString(), Contains.Substring("3"));
+		}
+
+		[Test]
+		public void TestVector3Variable()
+		{
+			var vec = new LunyVector3(1f, 2f, 3f);
+			var v = Variable.FromVector3(vec);
+
+			Assert.That(v.Type, Is.EqualTo(Variable.ValueType.Vector3));
+			Assert.That(v.AsVector3().X, Is.EqualTo(1f));
+			Assert.That(v.AsVector3().Y, Is.EqualTo(2f));
+			Assert.That(v.AsVector3().Z, Is.EqualTo(3f));
+			Assert.That(v.As<LunyVector3>(), Is.EqualTo(vec));
+			Assert.That(v.AsVector2(), Is.EqualTo(default(LunyVector2)));
+		}
+
+		[Test]
+		public void TestVectorDefaultValues()
+		{
+			var vNull = new Variable();
+			Assert.That(vNull.AsVector2(), Is.EqualTo(default(LunyVector2)));
+			Assert.That(vNull.AsVector3(), Is.EqualTo(default(LunyVector3)));
+
+			var vNum = (Variable)42.0;
+			Assert.That(vNum.AsVector2(), Is.EqualTo(default(LunyVector2)));
+			Assert.That(vNum.AsVector3(), Is.EqualTo(default(LunyVector3)));
+		}
+
+		[Test]
 		public void TestVariableEquals()
 		{
 			var vNum = (Variable)10.0;
