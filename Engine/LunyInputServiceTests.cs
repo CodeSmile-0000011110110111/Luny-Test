@@ -43,13 +43,13 @@ namespace Luny.Test.Engine
 		}
 
 		[Test]
-		public void GetAxisValue_Resets_On_PostUpdate()
+		public void GetAxisValue_NotCleared_On_PostUpdate()
 		{
 			var vec = new LunyVector2(1f, 0f);
 			_service.SimulateAxisInput("Move", vec);
 			_service.SimulatePostUpdate();
 
-			Assert.That(_service.GetAxisValue("Move"), Is.EqualTo(LunyVector2.Zero));
+			Assert.That(_service.GetAxisValue("Move"), Is.EqualTo(vec));
 		}
 
 		[Test]
@@ -87,14 +87,14 @@ namespace Luny.Test.Engine
 		}
 
 		[Test]
-		public void GetButtonJustPressed_True_On_Sustained_Hold_After_Reset()
+		public void GetButtonJustPressed_False_On_Sustained_Hold_After_Reset()
 		{
 			_service.SimulateButtonInput("Jump", true);
 			_service.SimulatePostUpdate();
 			_service.SimulateButtonInput("Jump", true);
 
 			// After PreUpdate, state resets, so the next press is treated as a new press
-			Assert.That(_service.GetButtonJustPressed("Jump"), Is.True);
+			Assert.That(_service.GetButtonJustPressed("Jump"), Is.False);
 			Assert.That(_service.GetButtonPressed("Jump"), Is.True);
 		}
 
