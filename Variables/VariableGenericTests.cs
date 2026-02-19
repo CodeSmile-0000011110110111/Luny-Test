@@ -7,22 +7,6 @@ namespace Luny.Test.Variables
 	[TestFixture]
 	public sealed class VariableGenericTests
 	{
-		private struct TestVector3
-		{
-			public Single X;
-			public Single Y;
-			public Single Z;
-
-			public TestVector3(Single x, Single y, Single z)
-			{
-				X = x;
-				Y = y;
-				Z = z;
-			}
-
-			public override String ToString() => $"({X}, {Y}, {Z})";
-		}
-
 		[Test]
 		public void Constructor_Stores_Value()
 		{
@@ -203,6 +187,22 @@ namespace Luny.Test.Variables
 
 			Assert.That(v.AsVector2(), Is.EqualTo(default(LunyVector2)));
 			Assert.That(v.AsVector3(), Is.EqualTo(default(LunyVector3)));
+		}
+
+		private struct TestVector3
+		{
+			public Single X;
+			public Single Y;
+			public Single Z;
+
+			public TestVector3(Single x, Single y, Single z)
+			{
+				X = x;
+				Y = y;
+				Z = z;
+			}
+
+			public override String ToString() => $"({X}, {Y}, {Z})";
 		}
 	}
 }

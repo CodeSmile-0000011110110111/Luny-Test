@@ -10,8 +10,7 @@ namespace Luny.Test.Engine
 	/// </summary>
 	internal sealed class TestInputService : LunyInputServiceBase, ILunyInputService
 	{
-		public void SimulateAxisInput(String actionName, LunyVector2 value) =>
-			RaiseDirectionalInput(actionName, value);
+		public void SimulateAxisInput(String actionName, LunyVector2 value) => RaiseDirectionalInput(actionName, value);
 
 		public void SimulateButtonInput(String actionName, Boolean pressed, Single analogValue = 1f) =>
 			RaiseButtonInput(actionName, pressed, analogValue);
@@ -28,10 +27,8 @@ namespace Luny.Test.Engine
 		public void SetUp() => _service = new TestInputService();
 
 		[Test]
-		public void GetAxisValue_Unknown_Action_Returns_Default()
-		{
+		public void GetAxisValue_Unknown_Action_Returns_Default() =>
 			Assert.That(_service.GetAxisValue("Unknown"), Is.EqualTo(default(LunyVector2)));
-		}
 
 		[Test]
 		public void GetAxisValue_Returns_Last_Known_Value()
@@ -128,10 +125,7 @@ namespace Luny.Test.Engine
 		}
 
 		[Test]
-		public void GetButtonValue_Unknown_Action_Returns_Zero()
-		{
-			Assert.That(_service.GetButtonValue("Unknown"), Is.EqualTo(0f));
-		}
+		public void GetButtonValue_Unknown_Action_Returns_Zero() => Assert.That(_service.GetButtonValue("Unknown"), Is.EqualTo(0f));
 
 		[Test]
 		public void OnInputAction_Event_Fires_For_Axis()

@@ -6,18 +6,6 @@ namespace Luny.Test.Variables
 	[TestFixture]
 	public sealed class VarHandleTests
 	{
-		private struct TestVec2
-		{
-			public Single X;
-			public Single Y;
-
-			public TestVec2(Single x, Single y)
-			{
-				X = x;
-				Y = y;
-			}
-		}
-
 		// --- ScalarVarHandle (existing behavior preserved) ---
 
 		[Test]
@@ -239,6 +227,18 @@ namespace Luny.Test.Variables
 			// Non-constant should work fine
 			handle.Value = new TestVec2(1, 2);
 			Assert.That(handle.Value.X, Is.EqualTo(1f));
+		}
+
+		private struct TestVec2
+		{
+			public Single X;
+			public Single Y;
+
+			public TestVec2(Single x, Single y)
+			{
+				X = x;
+				Y = y;
+			}
 		}
 	}
 }
