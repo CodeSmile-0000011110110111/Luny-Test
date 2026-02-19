@@ -1,3 +1,4 @@
+using Luny.Engine.Bridge;
 using NUnit.Framework;
 using System;
 
